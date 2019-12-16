@@ -2,7 +2,7 @@
 
 ## Available Scripts
 
-In the project directory, you can run yarn init to install required dependencies.
+In the project directory, you can run yarn install to install required dependencies.
 
 ### `yarn start`
 
