@@ -2,18 +2,25 @@ import React from 'react';
 import data from './data.js';
 import Header from './components/header'
 import './App.css'
+import ModalForm from './components/modalForm'
 
 
 class App extends React.Component {
   
-  state = {
-    id : Math.random(),
-    data: data,
-    subject: '',
-    minPer : null,
-    clsAtt : null,
-    totCls : null
+constructor(props){
+  super(props);
+  this.state = {
+      id : Math.random(),
+      data: data,
+      subject: '',
+      minPer : null,
+      clsAtt : null,
+      totCls : null,
+      isEditMode : false,
+      sub : null
   }
+}
+
 
   subjectC = (e) => {
     this.setState({
@@ -54,17 +61,47 @@ class App extends React.Component {
       subject: "",
       minPer : null,
       clsAtt : null,
-      totCls : null
+      totCls : null,
+      sub : null
     });
   }
 
   delete = (td) => {
     var data = this.state.data.filter(obj => obj.id !== td.id);
-    this.setState({data});
+    this.setState({
+      data,
+      subject: "",
+      minPer : null,
+      clsAtt : null,
+      totCls : null,
+      sub : null
+    });
   }
 
   edit = (td) => {
-    console.log(td)
+    let data = this.state.data;
+    this.setState({
+      data,
+      subject: "",
+      minPer : null,
+      clsAtt : null,
+      totCls : null,
+      sub  : td
+    });
+  }
+
+  editted = (edittedSub) => {
+    var info = this.state.data.filter(obj => obj.id !== edittedSub.id);
+    var data = [...info , edittedSub];
+    this.setState({
+      
+      data,
+      subject: "",
+      minPer : null,
+      clsAtt : null,
+      totCls : null,
+      sub  : null
+    })
   }
 
   showList = newSubject => {
@@ -77,27 +114,12 @@ class App extends React.Component {
           </div>
           <div className="col-sm-8">
           {newSubject.subject  } 
-          <div id="buttons" class="btn-group btn-group-sm">
-            <button  data-toggle="modal" data-target="#edit" 
-             class="btn btn-primary">Edit</button>
-             <div id="edit" class="modal fade">
-                  <div class="modal-dialog">
-                      <div class="modal-content">
-                          <div class="modal-header">
-                              <h4 class="modal-title">Want to edit !!!!</h4>
-                          </div>
-                          <div class="modal-body">
-                              
-                          </div>
-                          <div class="modal-footer">
-                          <button onClick = {()=>{this.edit(newSubject)}}
-                           class="btn btn-success" >Sign In</button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
+          <div id="buttons" className="btn-group btn-group-sm">
+            <button   onClick={()=>this.edit(newSubject)}  
+             className="btn btn-primary">Edit</button>
+             
             <button  onClick = {() =>  this.delete(newSubject)}
-             class="btn btn-primary">Delete</button>
+             className="btn btn-primary">Delete</button>
           </div>  
           </div>
         </div>
@@ -106,7 +128,14 @@ class App extends React.Component {
  
 
   form = () => {
-    return <div className="">
+    if(this.state.isEditMode){
+      return (
+        <div>
+        
+        </div>
+      )
+    } else 
+    return (<div>
       <div className="">
         <h4>Add New Subject</h4>
       </div>
@@ -145,12 +174,13 @@ class App extends React.Component {
             onClick={this.createNewSubject}
             className="btn btn-default">Add </button>
       </div>
-    </div>
+    </div>)
   }
   
   render () {
     return (
       <div>
+      <ModalForm sub={this.state.sub} editted={this.editted} />
         <Header />
     <div className="row">
       <div className="col-sm-8">
@@ -170,7 +200,10 @@ class App extends React.Component {
         }
       </div>
     </div>
-    
+    <div>
+                 
+                
+    </div>
     </div>
     )
   }
