@@ -1,10 +1,13 @@
 import React from 'react';
 import data from './data.js';
 import Header from './components/header'
+import './App.css'
 
 
 class App extends React.Component {
+  
   state = {
+    id : Math.random(),
     data: data,
     subject: '',
     minPer : null,
@@ -55,17 +58,47 @@ class App extends React.Component {
     });
   }
 
+  delete = (td) => {
+    var data = this.state.data.filter(obj => obj.id !== td.id);
+    this.setState({data});
+  }
+
+  edit = (td) => {
+    console.log(td)
+  }
 
   showList = newSubject => {
     var percentage = (newSubject.clsAtt/newSubject.totCls)*100;
     percentage = percentage.toFixed(2);
       return <span>
         <div className="row">
-          <div className="col-sm-3">
-            {percentage}
+          <div className="col-sm-4">
+            {percentage}%
           </div>
-          <div className="col-sm-9">
-          {newSubject.subject}
+          <div className="col-sm-8">
+          {newSubject.subject  } 
+          <div id="buttons" class="btn-group btn-group-sm">
+            <button  data-toggle="modal" data-target="#edit" 
+             class="btn btn-primary">Edit</button>
+             <div id="edit" class="modal fade">
+                  <div class="modal-dialog">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                              <h4 class="modal-title">Want to edit !!!!</h4>
+                          </div>
+                          <div class="modal-body">
+                              
+                          </div>
+                          <div class="modal-footer">
+                          <button onClick = {()=>{this.edit(newSubject)}}
+                           class="btn btn-success" >Sign In</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            <button  onClick = {() =>  this.delete(newSubject)}
+             class="btn btn-primary">Delete</button>
+          </div>  
           </div>
         </div>
         </span>
